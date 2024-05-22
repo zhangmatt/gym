@@ -2,294 +2,122 @@ html, body {
     font-family: 'Roboto', sans-serif;
     margin: 0;
     padding: 0;
-    background-color: #f4f4f4;
-    color: #333;
+    background-color: #121212; /* Dark background for dark mode */
+    color: #ffffff; /* White text color */
 }
 
 header, footer {
-    background-color: #ffffff;
+    background-color: #181818; /* Slightly lighter dark shade for contrast */
+    color: #ffffff; /* White text color */
     padding: 20px;
     text-align: center;
 }
 
 main {
-    padding: 20px;
+    padding: 40px;
+    margin: 0 auto; /* Centers the main content and adds automatic margins on both sides */
+}
+
+h1 {
+    font-size: 36px; /* Larger font size for main title */
+    margin-bottom: 20px; /* More space below the title */
+}
+
+/* Increasing font size for session names and titles */
+h2, h3 {
+    font-size: 28px; /* Larger font size for titles */
+    font-weight: bold; /* Bold font style for emphasis */
+    color: #ffffff; /* Using orange for title highlights */
 }
 
 .form-section, .sessions {
-    background: #fff;
+    background: #2c2c2c; /* Dark background for sections */
+    color: #ffffff; /* White text color */
     padding: 20px;
     margin-bottom: 20px;
     border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.3); /* Slightly darker shadow for depth */
 }
 
-.form-group {
-    margin-bottom: 10px;
+.form-group label {
+    color: #ffffff; /* White text color for labels */
 }
 
-label {
-    display: block;
-    margin-bottom: 5px;
-}
-
-input[type="text"], input[type="number"] {
-    width: calc(100% - 22px);
+input[type="text"], input[type="number"], input[type="date"] {
+    background: #333333; /* Dark input backgrounds */
+    color: #ffffff; /* White text for inputs */
+    border: 1px solid #444444; /* Darker border for inputs */
     padding: 10px;
-    margin-bottom: 10px;
-    border: 1px solid #ddd;
     border-radius: 4px;
+    width: 100%;
 }
 
-.btn {
-    display: inline-block;
-    background-color: #4CAF50;
-    color: white;
+.btn, .upload-btn, .complete-btn, .home-link, .start-session-btn {
+    background-color: #FFA500; /* Orange background for buttons */
+    color: #ffffff; /* White text for buttons */
+    border: none;
     padding: 10px 20px;
-    text-decoration: none;
-    border-radius: 5px;
+    border-radius: 4px;
     cursor: pointer;
+    text-transform: uppercase;
+    letter-spacing: 1px;
 }
 
-.btn:hover {
-    background-color: #45a049;
+.delete-btn, .delete-session-btn {
+    background-color: #FF0000; /* Orange background for buttons */
+    color: #ffffff; /* White text for buttons */
+    border: none;
+    padding: 10px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.start-session-btn, .delete-session-btn {
+    padding: 8px 16px; /* Ensure consistent padding */
+    font-size: 14px; /* Matching font size */
+    width: auto; /* Adjust width as necessary */
+    margin: 0 5px; /* Consistent margin for inline display */
+}
+
+.btn:hover, .upload-btn:hover, .complete-btn:hover, .home-link:hover, .start-session-btn:hover {
+    background-color: #ff8c00; /* Darker orange on hover */
+}
+
+.delete-btn:hover, .delete-session-btn:hover {
+    background-color: #b32020; /* Darker red on hover */
 }
 
 ul {
-    list-style: none;
+    list-style-type: none;
     padding: 0;
 }
 
 li {
+    background: #333333; /* Dark background for list items */
+    color: #ffffff; /* White text for list items */
     padding: 10px;
     border-radius: 5px;
-    background: #f9f9f9;
-    margin-bottom: 8px;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-}
-
-li:hover {
-    background-color: #e9e9e9;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.3);
 }
 
 article {
     margin-bottom: 20px;
 }
 
-h1, h2, h3 {
-    color: #333;
-}
-
-a {
-    color: #0066cc;
-    text-decoration: none;
-}
-
-a:hover {
-    text-decoration: underline;
-}
 
 @media (max-width: 768px) {
     header, footer {
-        padding: 15px;
-    }
-
-    main {
         padding: 10px;
     }
 
-    .form-section, .sessions {
-        padding: 15px;
-        margin-bottom: 10px;
+    main, .form-section, .sessions {
+        padding: 10px;
     }
 
     input[type="text"], input[type="number"], input[type="date"], .btn {
         width: 100%;
-        box-sizing: border-box; /* Ensures padding doesn't affect width */
-    }
-
-    .btn {
-        width: auto; /* Keeps button size according to content */
     }
 }
 
-* {
-    box-sizing: border-box;
-}
-body {
-    font-family: 'Roboto', sans-serif;
-    margin: 0;
-    padding: 0;
-    background-color: #f4f4f4;
-    color: #333;
-}
-header, footer {
-    background-color: #ffffff;
-    text-align: center;
-    padding: 20px;
-    margin-bottom: 20px;
-}
-.main {
-    padding: 20px;
-}
-.upload-form, .workouts {
-    background: white;
-    padding: 20px;
-    margin-bottom: 20px;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-}
-.file-input {
-    display: none; /* Hide the default file input */
-}
-.file-label, .upload-btn {
-    background-color: #5cb85c;
-    color: white;
-    padding: 10px 20px;
-    text-decoration: none;
-    border: none;
-    cursor: pointer;
-    border-radius: 4px;
-    margin-right: 5px;
-}
-
-.file-label:hover, .upload-btn:hover {
-    background-color: #4cae4c;
-}
-
-.workout {
-    border: 1px solid #ddd;
-    padding: 15px;
-    margin-top: 10px;
-    border-radius: 5px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-}
-
-.weight-input, #timer {
-    width: 100%;
-    padding: 8px;
-    margin-top: 5px;
-    border-radius: 4px;
-    border: 1px solid #ccc;
-}
-
-.complete-btn {
-    background-color: #007bff;
-    border-color: #007bff;
-    color: white;
-    padding: 10px 15px;
-    border-radius: 4px;
-    margin-top: 10px;
-    width: 100%;
-    font-size: 16px;
-}
-
-.complete-btn:hover {
-    background-color: #0056b3;
-    border-color: #0056b3;
-}
-
-.timer {
-    color: #d9534f;
-    font-size: 16px;
-    margin-top: 10px;
-    padding: 10px;
-    background-color: #f8f9fa;
-    text-align: center;
-    border-radius: 4px;
-}
-
-.home-link {
-    background-color: #6c757d;
-    color: white;
-    padding: 10px 20px;
-    text-decoration: none;
-    border-radius: 4px;
-    font-size: 16px;
-}
-
-.home-link:hover {
-    background-color: #5a6268;
-}
-
-@media (max-width: 768px) {
-    header, footer {
-        padding: 15px;
-    }
-
-    .main, .upload-form, .workouts {
-        padding: 15px;
-    }
-
-    .form-group {
-        margin-bottom: 15px;
-    }
-
-    .weight-input, #timer, .complete-btn, .home-link {
-        width: 100%;
-        box-sizing: border-box;
-    }
-}
-
-.uploaded-image{
-    max-width: 100%;
-    height: auto;
-    display: block;
-    margin: 0 auto;
-}
-
-.delete-btn {
-    background-color: #ff4d4d;
-    color: white;
-    border: none;
-    padding: 5px 10px;
-    border-radius: 4px;
-    cursor: pointer;
-}
-
-.delete-btn:hover {
-    background-color: #ff0000;
-}
-
-.delete-session-btn {
-    background-color: #ff6347; /* Tomato red for a warning effect */
-    color: white;
-    border: none;
-    padding: 8px 16px;
-    margin-top: 5px;
-    margin-left: 10px; /* Slight separation from session title */
-    cursor: pointer;
-    font-weight: bold;
-    border-radius: 4px;
-    text-transform: uppercase;
-}
-
-.delete-session-btn:hover {
-    background-color: #e53e3e; /* Darker shade on hover */
-}
-
-.delete-session-btn:focus {
-    outline: none; /* Removes the default focus outline */
-    box-shadow: 0 0 0 2px rgba(255,99,71,0.5); /* Adds a soft glow effect */
-}
-
-/* Optional: Responsive adjustments */
-@media (max-width: 768px) {
-    .delete-session-btn {
-        padding: 6px 12px;
-        font-size: 0.9em;
-    }
-}
-
-.start-session-btn {
-    background-color: #4CAF50; /* Green background */
-    color: white;
-    padding: 6px 12px;
-    text-decoration: none; /* Removes underline from link */
-    border-radius: 4px;
-    margin-left: 10px; /* Space from the delete button */
-}
-
-.start-session-btn:hover {
-    background-color: #45a049; /* Slightly darker green on hover */
-}
