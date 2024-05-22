@@ -2,14 +2,16 @@
 import os
 from flask import Flask, request, render_template, jsonify, redirect, url_for, flash
 from werkzeug.utils import secure_filename
+from flask_wtf.csrf import CSRFProtect
 
 # Create a Flask application instance
 # '__name__' is a special variable that gets as value the name of the Python script
-app = Flask(__name__)
+app = Flask(__name__, static_folder='static')
+app.config['SECRET_KEY'] = 'poopy123megan'  # Make sure to set a secure secret key
 
 # Configure the maximum upload size (e.g., 16MB) and upload folder
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024
-app.config['UPLOAD_FOLDER'] = 'uploads/'
+app.config['UPLOAD_FOLDER'] = 'static/uploads/'
 
 # Ensure the upload folder exists
 if not os.path.exists(app.config['UPLOAD_FOLDER']):
@@ -39,15 +41,12 @@ def upload_file():
         if file and allowed_file(file.filename):
             filename = secure_filename(file.filename)
             file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
-            try:
-                file.save(file_path)
-            except IOError as e:
-                # Log the error and inform the user
-                print(f"Error saving file: {e}")
-                flash('Error saving file.')
-                return redirect(request.url)
-            return redirect(url_for('home'))
+            file.save(file_path)
+            # Render a template showing the uploaded image
+            image_url = url_for('static', filename=os.path.join('uploads', filename))
+            return render_template('display_image.html', image_url=image_url)
     return render_template('upload.html')
+
 
 # Define a route for the homepage, which can handle both GET and POST requests
 @app.route('/', methods=['GET', 'POST'])
@@ -63,34 +62,57 @@ def home():
         if session_title not in workout_sessions:
             workout_sessions[session_title] = []
         workout_sessions[session_title].append(workout)
+        
+        print("Added workout:", workout)  # Print workout to verify data
 
-    # Ensure that 'workout_sessions' is passed to the template
-    files = os.listdir(app.config['UPLOAD_FOLDER']) if os.path.exists(app.config['UPLOAD_FOLDER']) else []
-    return render_template('home.html', files=files, workout_sessions=workout_sessions)
+    return render_template('home.html', workout_sessions=workout_sessions)
 
 
 @app.route('/start-workout/<session_title>', methods=['GET'])
-
 def start_workout(session_title):
-    session_workouts=workout_sessions.get(session_title,[])
-    return jsonify(session_workouts)
+    # Assuming you have all necessary data loaded or calculated
+    # Redirect to the workout session page with the session data
+    return redirect(url_for('workout_session', session_title=session_title))
 
-@app.route('/workout-session/<session_title>')
+
+@app.route('/workout-session/<session_title>', methods=['GET', 'POST'])
+@app.route('/workout-session/<session_title>', methods=['GET', 'POST'])
 def workout_session(session_title):
     workouts = workout_sessions.get(session_title, [])
+    # Check for additional POST handling if needed
+    if request.method == 'POST' and 'file' in request.files:
+        file = request.files['file']
+        if file.filename != '' and allowed_file(file.filename):
+            filename = secure_filename(file.filename)
+            file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+            file.save(file_path)
+            image_url = url_for('static', filename='uploads/' + filename)
+            flash('File successfully uploaded')
+
     return render_template('workout_session.html', session_title=session_title, workouts=workouts)
 
-@app.route('/delete-session/<session_title>')
+
+@app.route('/delete-session/<session_title>', methods=['POST'])
 def delete_session(session_title):
     if session_title in workout_sessions:
         del workout_sessions[session_title]  # Delete the entire session
+        flash('Session deleted successfully')
+    else:
+        flash('Session not found', 'error')
     return redirect(url_for('home'))  # Redirect back to the home page after deletion
 
+
 @app.route('/delete-workout/<session_title>/<int:workout_index>')
-def delete_workout(session_title, workout_index):
-    if session_title in workout_sessions and workout_index < len(workout_sessions[session_title]):
-        workout_sessions[session_title].pop(workout_index)  # Remove the workout by index
-    return redirect(url_for('home'))  # Redirect back to the home page after deletion
+@app.route('/delete-exercise/<session_title>/<int:exercise_index>', methods=['POST'])
+def delete_exercise(session_title, exercise_index):
+    if session_title in workout_sessions and 0 <= exercise_index < len(workout_sessions[session_title]):
+        del workout_sessions[session_title][exercise_index]
+        # Optionally, flash a message to confirm deletion
+        flash('Exercise deleted successfully', 'success')
+    else:
+        flash('Exercise could not be found', 'error')
+    return redirect(url_for('workout_session', session_title=session_title))
+
 
 
 # Check if the script is executed as the main program
