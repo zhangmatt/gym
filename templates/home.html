@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
+    <title>Workout Tracker</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        function startWorkout(sessionTitle) {
+            $.get(`/start-workout/${sessionTitle}`, function(workouts) {
+                alert(`Starting workout: ${sessionTitle}`);
+                workouts.forEach(workout => {
+                    console.log(`Exercise: ${workout.exercise}, Sets: ${workout.sets}, Reps: ${workout.reps}, Rest: ${workout.rest}s`);
+                });
+            });
+        }
+    </script>
+</head>
+<body>
+    <h1>Workout Tracker</h1>
+    <form action="/" method="POST">
+        Session Title: <input type="text" name="session_title" required><br>
+        Exercise: <input type="text" name="exercise" required><br>
+        Sets: <input type="number" name="sets" required><br>
+        Reps: <input type="number" name="reps" required><br>
+        Rest Time (s): <input type="number" name="rest" required><br>
+        <button type="submit">Add Workout</button>
+    </form>
+    <h2>Workout Sessions</h2>
+    {% for session_title, workouts in workout_sessions.items() %}
+        <h3>{{ session_title }}
+            <a href="{{ url_for('workout_session', session_title=session_title) }}">Start This Workout</a>
+            | <a href="{{ url_for('delete_session', session_title=session_title) }}" onclick="return confirm('Are you sure?');">Delete Session</a>
+        </h3>
+        <ul>
+            {% for workout in workouts %}
+                <li>
+                    {{ workout.exercise }} - {{ workout.sets }} sets of {{ workout.reps }} reps with {{ workout.rest }}s rest
+                    | <a href="{{ url_for('delete_workout', session_title=session_title, workout_index=loop.index0) }}" onclick="return confirm('Are you sure?');">Delete Workout</a>
+                </li>
+            {% endfor %}
+        </ul>
+    {% endfor %}
+</body>
+</html>

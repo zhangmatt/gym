@@ -1,0 +1,86 @@
+
+html, body, p, h1, h2, h3, h4, h5, h6, button, input, textarea {
+    font-family: 'Roboto', sans-serif;
+}
+
+body {
+    background-color: #f4f4f4;
+    margin: 20px;
+    color: #333;
+}
+
+h1, h2, h3 {
+    color: #333;
+}
+
+form {
+    background: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+input[type="text"], input[type="number"], input[type="date"] {
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    display: block;
+    width: 95%;
+}
+
+button {
+    background-color: #5cb85c;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #4cae4c;
+}
+
+ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+li {
+    background: #fff;
+    margin-top: 8px;
+    padding: 10px;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+#timer {
+    font-size: 20px;
+    color: #d9534f;  /* Red color to emphasize the timer */
+    margin: 10px 0;
+}
+
+#workout div {
+    margin-bottom: 20px;
+}
+
+a.delete-link {
+    color: #ff6347;  /* Tomato red for delete links */
+}
+
+a.delete-link:hover {
+    text-decoration: underline;
+}
+
+@media (max-width: 768px) {
+    body {
+        padding: 10px;
+    }
+
+    input[type="text"], input[type="number"], input[type="date"], button {
+        width: 100%;
+    }
+}
