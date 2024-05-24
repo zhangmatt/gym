@@ -13,7 +13,9 @@
         <h1>Workout Tracker</h1>
     </header>
     <main>
+        <div class="content-container">
         <section class="form-section">
+            <h3>Add a Workout</h3>
             <form action="/" method="POST" class="workout-form">
                 <div class="form-group">
                     <label for="session_title">Session Title:</label>
@@ -39,7 +41,7 @@
             </form>
         </section>
         <section class="sessions">
-            <h2>Workout Sessions</h2>
+            <h2><u>WORKOUT SESSIONS</u></h2>
             {% for session_title, workouts in workout_sessions.items() %}
             <article>
                 <h3>{{ session_title }}
@@ -51,18 +53,21 @@
                 </h3>
                 <ul>
                     {% for workout in workouts %}
-                    <div class="workout" id="workout{{ loop.index0 }}">
-                        <h2>{{ workout.exercise }}</h2>
-                        <p>Sets: {{ workout.sets }} | Reps: {{ workout.reps }} | Rest: {{ workout.rest }}s</p>
-                        <form action="{{ url_for('delete_exercise', session_title=session_title, exercise_index=loop.index0) }}" method="POST">
-                            <button type="submit" class="delete-btn">Delete</button>
-                        </form>            
+                    <div class="workout_home" id="workout{{ loop.index0 }}">
+                        <p>
+                            <strong>{{ workout.exercise }}:</strong> Sets: {{ workout.sets }} | Reps: {{ workout.reps }} | Rest: {{ workout.rest }}s
+                        </p>
+                        <form action="{{ url_for('delete_exercise', session_title=session_title, exercise_index=loop.index0) }}" method="POST" class="delete-form">
+                            <button type="submit" class="delete-btn">X</button>
+                        </form>   
                     </div>
+                    
                     {% endfor %}
                 </ul>
             </article>
             {% endfor %}
-        </section>                
+        </section>      
+        </div>          
     </main>
     <footer>
         <p>Created by <a href="https://github.com/zhangmatt" target="_blank">Matthew Zhang</a></p>

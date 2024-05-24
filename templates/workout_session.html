@@ -8,65 +8,70 @@
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
-        function startTimer(duration, display) {
-            var timer = duration, minutes, seconds;
-            var interval = setInterval(function () {
-                minutes = parseInt(timer / 60, 10);
-                seconds = parseInt(timer % 60, 10);
-
+        var intervals = {}; // Store intervals using their indexes and set numbers as keys
+        var setCounts = {}; // Store count of sets completed for each workout
+        
+        function startTimer(duration, index, setNumber) {
+            var timerId = index + '-' + setNumber;
+            var display = document.getElementById('timer' + timerId);
+            var button = document.getElementById('complete-btn' + timerId);
+            if (intervals[timerId]) {
+                clearInterval(intervals[timerId]); // Clear existing timer if any
+            }
+            var seconds = duration;
+            intervals[timerId] = setInterval(function () {
+                var minutes = parseInt(seconds / 60, 10);
+                var remainingSeconds = parseInt(seconds % 60, 10);
+    
                 minutes = minutes < 10 ? "0" + minutes : minutes;
-                seconds = seconds < 10 ? "0" + seconds : seconds;
-
-                display.textContent = minutes + ":" + seconds;
-
-                if (--timer < 0) {
-                    clearInterval(interval);
+                remainingSeconds = remainingSeconds < 10 ? "0" + remainingSeconds : remainingSeconds;
+    
+                display.textContent = minutes + ":" + remainingSeconds;
+    
+                if (--seconds < 0) {
+                    clearInterval(intervals[timerId]);
                     display.textContent = "Rest over!";
-                    document.getElementById('next-set').disabled = false; // Enable the next set button
+                    button.disabled = false; // Re-enable the button
                 }
             }, 1000);
         }
-
-        function completeSet(button, index) {
-        var restPeriod = document.getElementById('rest' + index).value; // Ensure this ID exists
-        var weight = document.getElementById('weight' + index).value; // Ensure this ID exists
-        var display = document.getElementById('timer' + index); // Ensure this ID exists
-
-        if (restPeriod && weight && display) {
-            alert('Completed set with ' + weight + 'kg');
-            startTimer(parseInt(restPeriod), display);
-            button.disabled = true; // Disable button during the rest period
-        } else {
-            console.error("Error: Missing elements or values."); // Helps identify missing elements
+        
+        function completeSet(button, index, setNumber) {
+            var weightId = 'weight' + index + '-' + setNumber;
+            var restId = 'rest' + index + '-' + setNumber;
+            var weight = document.getElementById(weightId).value;
+            var restPeriod = document.getElementById(restId).value;
+            
+            if (restPeriod && weight) {
+                alert('Completed set with ' + weight + 'lbs');
+                startTimer(parseInt(restPeriod), index, setNumber);
+                button.disabled = true; // Disable button during the rest period
+            } else {
+                console.error("Error: Missing elements or values.");
+            }
         }
-}
-
-    </script>
+    </script>    
 </head>
 <body>
     <header>
         <h1>Workout Session: {{ session_title }}</h1>
     </header>
     <main>
-        <section>
-            <form method="post" action="" enctype="multipart/form-data" class="upload-form">
-                <input type="file" name="file" id="file-upload" class="file-input">
-                <label for="file-upload" class="file-label">Choose a file</label>
-                <button type="submit" class="upload-btn">Upload</button>
-            </form>
-            {% if image_url %}
-                <img src="{{ image_url }}" alt="Uploaded Image" class="uploaded-image">
-            {% endif %}
-        </section>
         <section class="workouts">
             {% for workout in workouts %}
                 <div class="workout" data-index="{{ loop.index }}" id="workout{{ loop.index }}">
-                    <h2>{{ workout.exercise }}</h2>
-                    <p>Sets: {{ workout.sets }} | Reps: {{ workout.reps }}</p>
-                    <input type="number" id="weight{{ loop.index }}" class="weight-input" placeholder="Enter weight">
-                    <input type="number" id="rest{{ loop.index }}" class="rest-input" value="{{ workout.rest }}" hidden>
-                    <button onclick="completeSet(this, '{{ loop.index }}')" class="complete-btn">Complete Set</button>
-                    <div id="timer{{ loop.index }}" class="timer">Rest Timer: 00:00</div>
+                    <h2><strong>{{ workout.exercise }}:</strong> Sets: {{ workout.sets }} | Reps: {{ workout.reps }} | Rest: {{ workout.rest }}s</h2>
+                    <div class="sets-container">
+                        {% for i in range(workout.sets) %}
+                            <div class="set" id="set{{ loop.index0 }}">
+                                <input type="number" id="weight{{ loop.index }}-{{ loop.index0 }}" class="weight-input" placeholder="Enter weight for set {{ loop.index0 + 1 }}">
+                                <input type="number" id="weight{{ loop.index }}-{{ loop.index0 }}" class="weight-input" placeholder="Enter reps for set {{ loop.index0 + 1 }}">
+                                <input type="number" id="rest{{ loop.index }}-{{ loop.index0 }}" class="rest-input" value="{{ workout.rest }}" hidden>
+                                <button onclick="completeSet(this, '{{ loop.index }}', '{{ loop.index0 }}')" id="complete-btn{{ loop.index }}-{{ loop.index0 }}" class="complete-btn">Complete Set</button>
+                                <div id="timer{{ loop.index }}-{{ loop.index0 }}" class="timer">Rest Timer: 00:00</div>
+                            </div>
+                        {% endfor %}
+                    </div>
                 </div>
             {% endfor %}
         </section>

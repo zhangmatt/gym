@@ -32,24 +32,51 @@ h2, h3 {
 
 .form-section, .sessions {
     background: #2c2c2c; /* Dark background for sections */
+    justify-content: center; /* Centering content */
     color: #ffffff; /* White text color */
     padding: 20px;
     margin-bottom: 20px;
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0,0,0,0.3); /* Slightly darker shadow for depth */
+    min-height: 500px; /* Ensures a minimum height for sections */
 }
 
+/* Maintain full height dynamically */
+.main {
+    display: flex;
+    flex-direction: row; /* Aligns child sections side by side */
+    align-items: stretch; /* Stretches children to fill available vertical space */
+    justify-content: space-between; /* Space between sections */
+}
 .form-group label {
     color: #ffffff; /* White text color for labels */
 }
 
-input[type="text"], input[type="number"], input[type="date"] {
+.form-section input[type="text"],
+.form-section input[type="number"] {
     background: #333333; /* Dark input backgrounds */
     color: #ffffff; /* White text for inputs */
     border: 1px solid #444444; /* Darker border for inputs */
-    padding: 10px;
+    padding: 8px;
     border-radius: 4px;
-    width: 100%;
+    width: 50%;
+}
+
+.form-section {
+    flex: 1; /* Flex grow to take available space */
+    display: grid;
+    margin-right: 20px; /* Add some right margin for spacing between sections */
+    grid-template-columns: 1fr 1fr;  /* Two columns if you want labels and inputs side by side */
+    gap: 10px;  /* Space between grid items */
+    align-items: center;  /* Aligns items vertically */
+}
+
+.form-group {
+    display: contents;  /* Makes label and input behave as direct children of the form for layout purposes */
+}
+
+label, input {
+    display: block;
 }
 
 .btn, .upload-btn, .complete-btn, .home-link, .start-session-btn {
@@ -106,6 +133,99 @@ article {
     margin-bottom: 20px;
 }
 
+.content-container {
+    display: flex;
+    flex-direction: row;  /* Aligns children side by side */
+    justify-content: space-between;  /* Adds space between the two sections */
+    margin: 20px;
+}
+
+.form-section, .sessions {
+    flex: 1;  /* Each section will take equal amount of space */
+    margin: 10px;  /* Adds margin around each section for spacing */
+    padding: 20px;
+    background: #2c2c2c; /* Dark background for sections */
+    color: #ffffff; /* White text color */
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+}
+
+.sessions{
+    flex:2; /* Larger section for sessions */
+}
+
+.rest-input {
+    display: none !important;
+}
+
+.workout_home {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    border-radius: 5px;
+    background: #333;
+    color: #fff;
+    margin-bottom: 8px;
+}
+
+.workout_home p {
+    margin: 0; /* Remove margin to align better */
+    flex-grow: 1; /* Allow the paragraph to take up the available space */
+}
+
+.delete-form {
+    margin: 0 15px; /* Add some margin for spacing */
+}
+
+.delete-btn {
+    background-color: #FF6347; /* Tomato red for a warning effect */
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    cursor: pointer;
+    font-weight: bold;
+    border-radius: 4px;
+    text-transform: uppercase;
+}
+
+.delete-btn:hover {
+    background-color: #E53E3E; /* Darker shade on hover */
+}
+
+/* Style for the container that holds all set-related elements */
+.sets-container {
+    display: flex;
+    flex-direction: column;
+    margin-top: 20px;
+}
+
+/* Style for each individual set */
+.set {
+    display: flex;
+    align-items: center; /* Align items vertically in the center */
+    margin-bottom: 10px;
+}
+
+.weight-input, .rest-input {
+    margin-right: 10px; /* Space between input boxes and the next element */
+}
+
+.complete-btn, .timer {
+    margin-right: 10px; /* Space between buttons/timers and the next element */
+}
+
+.timer {
+    min-width: 100px; /* Ensure the timer has a minimum width for better alignment */
+    text-align: center; /* Center text within the timer */
+}
+
+.input-group {
+    display: flex;
+    flex-direction: column; /* Stack the weight and reps input vertically */
+    margin-right: 10px; /* Space between the input group and the next element */
+}
+
 
 @media (max-width: 768px) {
     header, footer {
@@ -116,8 +236,17 @@ article {
         padding: 10px;
     }
 
-    input[type="text"], input[type="number"], input[type="date"], .btn {
+    .form-section input[type="text"],
+    .form-section input[type="number"] {
         width: 100%;
+        padding: 8px;  /* Slightly less padding to reduce overall size */
+        margin-bottom: 10px;
+        border: 1px solid #444444;
+        border-radius: 4px;
+    }
+
+    .content-container {
+        flex-direction: column;  /* Stacks the children vertically on smaller screens */
     }
 }
 
