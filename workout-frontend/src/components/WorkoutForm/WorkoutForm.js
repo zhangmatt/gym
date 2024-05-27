@@ -19,11 +19,12 @@ function WorkoutForm({ onAddSuccess }) {  // Added a prop to handle successful a
             rest
         };
     
-                // In WorkoutForm component
+        console.log('Submitting workout data:', workoutData); // Verify data before sending
+    
         axios.post('/api/workouts', workoutData)
         .then(response => {
-            alert('Workout added successfully!');
-            onAddSuccess(response.data);  // Pass the new workout data back
+            console.log('Received workout data from server:', response.data); // Log the server response
+            onAddSuccess(response.data); // Check the structure here
             setSessionTitle('');
             setExercise('');
             setSets('');
@@ -34,8 +35,8 @@ function WorkoutForm({ onAddSuccess }) {  // Added a prop to handle successful a
             console.error('Error adding workout:', error);
             alert('Failed to add workout');
         });
-
     };
+    
     
 
     return (

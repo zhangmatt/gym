@@ -1,78 +1,100 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
 function WorkoutSessions() {
-    const [sessions, setSessions] = useState([]);
+    const [sessionGroups, setSessionGroups] = useState({});
     const navigate = useNavigate();
-
-    useEffect(() => {
+    
+    const fetchWorkouts = useCallback(() => { // Wrapped with useCallback
         axios.get('/api/workouts')
             .then(response => {
-                console.log('Data received:', response.data); // Check the structure here
-                setSessions(response.data);
+                const grouped = groupWorkoutsBySession(response.data);
+                setSessionGroups(grouped);
             })
             .catch(error => {
                 console.error('Error fetching workouts:', error);
             });
-    }, []);
+    }, []); // No dependencies, this function doesn't depend on any external values
+
+    useEffect(() => {
+        fetchWorkouts();
+    }, [fetchWorkouts]); // Now fetchWorkouts is stable across renders
     
+    useEffect(() => {
+        console.log('Session Groups updated:', sessionGroups);
+    }, [sessionGroups]);
+
+    const groupWorkoutsBySession = (workouts) => {
+        const newGroups = {};
+        workouts.forEach((workout) => {
+            if (!newGroups[workout.session_title]) {
+                newGroups[workout.session_title] = [];
+            }
+            newGroups[workout.session_title].push(workout);
+        });
+        return newGroups;
+    };
     
 
     const handleStartWorkout = (sessionTitle) => {
         navigate(`/session/${encodeURIComponent(sessionTitle)}`);
     };
 
-    const handleDeleteSession = (sessionId) => {
-        console.log(`Attempting to delete session: ${sessionId}`);
-        axios.delete(`/api/workouts/${encodeURIComponent(sessionId)}`)
+    const handleDeleteSession = (sessionTitle) => {
+        const encodedTitle = encodeURIComponent(sessionTitle);
+        console.log('Deleting session:', encodedTitle);
+        
+        axios.delete(`/api/workouts/session/${encodedTitle}`)
             .then(() => {
                 alert('Session deleted successfully');
-                // Update local state to remove the deleted session
-                setSessions(prevSessions => prevSessions.filter(session => session.id !== sessionId));
+                fetchWorkouts();  // Refetch to update the list after deletion
             })
             .catch(error => {
                 console.error('Error deleting session:', error);
-                alert('Failed to delete session');
+                alert(`Failed to delete session: ${error.response ? error.response.data.error : 'Server error'}`);
             });
-    };    
-
+    };
+    
     const handleDeleteWorkout = (workoutId) => {
         axios.delete(`/api/workouts/${workoutId}`)
             .then(() => {
                 alert('Workout deleted successfully');
-                setSessions(currentSessions => currentSessions.filter(workout => workout.id !== workoutId));
+                fetchWorkouts();  // Refetch to update the list after deletion
             })
             .catch(error => {
                 console.error('Error deleting workout:', error);
                 alert('Failed to delete workout');
             });
     };
-    
+
     return (
         <section className="sessions">
             <h2><u>WORKOUT SESSIONS</u></h2>
-            {sessions.map((workout, index) => (
+            {Object.keys(sessionGroups).map((sessionTitle, index) => (
+                <div key={sessionTitle}>
                 <article key={index}>
-                    <h3>{workout.session_title}
-                        <button className="start-session-btn" onClick={() => handleStartWorkout(workout.session_title)}>
+                    <h3>{sessionTitle}
+                        <button className="start-session-btn" onClick={() => handleStartWorkout(sessionTitle)}>
                             Start This Workout
                         </button>
-                        <button className="delete-btn" onClick={() => handleDeleteSession(workout.id)}>
+                        <button className="delete-btn" onClick={() => handleDeleteSession(sessionTitle)}>
                             Delete Session
                         </button>
                     </h3>
                     <ul>
-                        <div className="workout_home">
-                            <p>{workout.exercise}: Sets: {workout.sets} | Reps: {workout.reps} | Rest: {workout.rest}s</p>
-                            <button className="delete-btn" onClick={() => handleDeleteWorkout(workout.id)}>X</button>
-                        </div>
+                        {sessionGroups[sessionTitle].map((workout) => (
+                            <div className="workout_home" key={workout.id}>
+                                <p>{workout.exercise}: Sets: {workout.sets} | Reps: {workout.reps} | Rest: {workout.rest}s</p>
+                                <button className="delete-btn" onClick={() => handleDeleteWorkout(workout.id)}>X</button>
+                            </div>
+                        ))}
                     </ul>
                 </article>
+                </div>
             ))}
         </section>
     );
-    
 }
 
 export default WorkoutSessions;

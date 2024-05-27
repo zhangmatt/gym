@@ -11,7 +11,12 @@ function WorkoutSessionDetails() {
     useEffect(() => {
         axios.get(`/api/workouts/${sessionId}`)
             .then(response => {
-                setWorkouts(response.data.workouts);
+                const grouped = response.data.reduce((acc, workout) => {
+                    acc[workout.session_title] = acc[workout.session_title] || [];
+                    acc[workout.session_title].push(workout);
+                    return acc;
+                }, {});
+                setWorkouts(grouped);
             })
             .catch(error => {
                 console.error('Error fetching session workouts:', error);
