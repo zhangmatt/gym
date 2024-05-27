@@ -64,24 +64,25 @@ function App() {
   };
 
   const handleAddSuccess = (newWorkout) => {
-    console.log('New workout data:', newWorkout); // Check what newWorkout contains
-  
+    console.log('New workout data:', newWorkout);
+
     if (!newWorkout.session_title) {
       console.error('Session title is missing in the new workout data');
       return; // Early return if session_title is missing
     }
-  
+
     setSessionGroups(prevGroups => {
       const updatedGroups = {...prevGroups};
-      // Check if the session title already exists, if not initialize it
       if (!updatedGroups[newWorkout.session_title]) {
         updatedGroups[newWorkout.session_title] = [];
       }
       updatedGroups[newWorkout.session_title].push(newWorkout);
-      console.log('Updated session groups:', updatedGroups);  // Check the updated state
+      console.log('Updated session groups:', updatedGroups);
       return updatedGroups;
     });
-  };
+};
+
+
   
 
   return (
@@ -93,11 +94,13 @@ function App() {
             <Routes>
               <Route path="/" element={
                 <>
+                <div className="main">
                   <WorkoutForm onAddSuccess={handleAddSuccess} />
-                  <WorkoutSessions sessionGroups={sessionGroups} />
+                  <WorkoutSessions sessionGroups={sessionGroups}  />
+                </div>
                 </>
               } />
-              <Route path="/session/:sessionTitle" element={<WorkoutSessionDetails />} />
+              <Route path="/session/:sessionId" element={<WorkoutSessionDetails />} />
             </Routes>
           </ErrorBoundary>
         </main>

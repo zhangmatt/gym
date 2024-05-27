@@ -80,7 +80,7 @@ label, input {
 }
 
 .btn, .upload-btn, .complete-btn, .home-link, .start-session-btn {
-  background-color: #FFA500; /* Orange background for buttons */
+  background-color: #f58025; /* Orange background for buttons */
   color: #ffffff; /* White text for buttons */
   border: none;
   padding: 10px 20px;
@@ -109,7 +109,7 @@ label, input {
 }
 
 .btn:hover, .upload-btn:hover, .complete-btn:hover, .home-link:hover, .start-session-btn:hover {
-  background-color: #ff8c00; /* Darker orange on hover */
+  background-color: #f58025; /* Darker orange on hover */
 }
 
 .delete-btn:hover, .delete-session-btn:hover {
@@ -150,8 +150,9 @@ article {
   box-shadow: 0 2px 4px rgba(0,0,0,0.3);
 }
 
-.sessions{
-  flex:2; /* Larger section for sessions */
+/* Adjust flex-grow on larger screens for .sessions to take more space if needed */
+.sessions {
+  flex-grow: 2;
 }
 
 .rest-input {
@@ -228,6 +229,11 @@ article {
 
 
 @media (max-width: 768px) {
+  .content-container {
+      flex-direction: column;  /* Stacks the children vertically on smaller screens */
+  }
+
+  /* Adjustments for smaller screens */
   header, footer {
       padding: 10px;
   }
@@ -238,15 +244,8 @@ article {
 
   .form-section input[type="text"],
   .form-section input[type="number"] {
-      width: 100%;
-      padding: 8px;  /* Slightly less padding to reduce overall size */
-      margin-bottom: 10px;
-      border: 1px solid #444444;
-      border-radius: 4px;
-  }
-
-  .content-container {
-      flex-direction: column;  /* Stacks the children vertically on smaller screens */
+      width: 100%;  /* Makes input fields take full width */
+      padding: 8px;  /* Adjust padding for smaller screens */
   }
 }
 

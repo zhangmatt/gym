@@ -30,7 +30,12 @@ function WorkoutForm({ onAddSuccess }) {  // Added a prop to handle successful a
             setSets('');
             setReps('');
             setRest('');
+
+            // Reload the page
+            
+            window.location.reload();
         })
+        
         .catch(error => {
             console.error('Error adding workout:', error);
             alert('Failed to add workout');
