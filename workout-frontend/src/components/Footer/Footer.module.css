@@ -1,0 +1,22 @@
+footer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    background-color: #f1f1f1; /* Change according to your design */
+  }
+  
+  footer button {
+    padding: 10px 20px;
+    margin-right: 20px; /* Space between button and text */
+    background-color: rgb(193, 105, 22); /* Example blue */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  footer button:hover {
+    background-color: #a24b0d;
+  }
+  

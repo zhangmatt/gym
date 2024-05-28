@@ -227,6 +227,30 @@ article {
   margin-right: 10px; /* Space between the input group and the next element */
 }
 
+.footer {
+  padding: 20px;
+  text-align: center;
+  background-color: #f1f1f1; /* Light gray background */
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+}
+
+.footer-button {
+  padding: 10px 20px;
+  font-size: 16px;
+  color: white;
+  background-color: #007BFF; /* Bootstrap blue */
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.footer-button:hover {
+  background-color: #0056b3;
+}
+
 
 @media (max-width: 768px) {
   .content-container {
@@ -248,4 +272,5 @@ article {
       padding: 8px;  /* Adjust padding for smaller screens */
   }
 }
+
 

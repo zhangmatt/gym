@@ -103,7 +103,7 @@ function WorkoutSessionDetails() {
                 </section>
             </main>
             <footer>
-                <button onClick={() => navigate('/')}>Return to Home</button>
+                <button onClick={() => navigate('/home')}>Return to Home</button>
             </footer>
         </div>
     );

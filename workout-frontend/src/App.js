@@ -7,6 +7,9 @@ import Footer from './components/Footer/Footer.js';
 import WorkoutForm from './components/WorkoutForm/WorkoutForm.js';
 import WorkoutSessions from './components/WorkoutSessions/WorkoutSessions.js';
 import WorkoutSessionDetails from './components/WorkoutSessionDetails/WorkoutSessionDetails.js';
+import StartPage from './components/StartPage/StartPage.js';
+import { Navigate } from 'react-router-dom';
+
 import axios from 'axios';
 import './App.css';
 
@@ -37,8 +40,22 @@ class ErrorBoundary extends React.Component {
 }
 
 function App() {
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [sessionGroups, setSessionGroups] = useState({});
+  const [isGuest, setIsGuest] = useState(false);  // Add a state to handle guest access
 
+  const logout = () => {
+    setIsAuthenticated(false); // Clear the authenticated state
+    // Additionally, clear any stored tokens or session data here if applicable
+  };
+
+  const handleLoginSuccess = (status) => {
+    setIsAuthenticated(status);
+  };
+
+const handleGuestLogin = (status) => {
+    setIsGuest(status);
+  };
   const fetchWorkouts = useCallback(() => {
     axios.get('/api/workouts')
       .then(response => {
@@ -54,6 +71,17 @@ function App() {
     fetchWorkouts();
   }, [fetchWorkouts]); // Now fetchWorkouts is stable and included in the dependency array
 
+  useEffect(() => {
+    // Optionally check if the user is already logged in when the app loads
+    axios.get('/api/check-session')
+      .then(response => {
+        setIsAuthenticated(response.data.isAuthenticated);
+      })
+      .catch(error => {
+        console.error('Session check failed:', error);
+        setIsAuthenticated(false);
+      });
+  }, []);
 
   const groupWorkoutsBySession = (workouts) => {
     return workouts.reduce((acc, workout) => {
@@ -80,34 +108,37 @@ function App() {
       console.log('Updated session groups:', updatedGroups);
       return updatedGroups;
     });
+
+    
 };
 
-
-  
-
-  return (
-    <Router>
-      <div className="App">
-        <Header />
-        <main className="main-content">
-          <ErrorBoundary>
-            <Routes>
-              <Route path="/" element={
-                <>
+return (
+  <Router>
+    <div className="App">
+      <Header />
+      <main className="main-content">
+        <ErrorBoundary>
+          <Routes>
+            <Route path="/" element={
+              (isAuthenticated || isGuest) ? <Navigate replace to="/home" /> : <StartPage onLogin={handleLoginSuccess} onGuest={handleGuestLogin} />
+            } />
+            <Route path="/home" element={
+              <>
                 <div className="main">
                   <WorkoutForm onAddSuccess={handleAddSuccess} />
-                  <WorkoutSessions sessionGroups={sessionGroups}  />
+                  <WorkoutSessions sessionGroups={sessionGroups} />
                 </div>
-                </>
-              } />
-              <Route path="/session/:sessionId" element={<WorkoutSessionDetails />} />
-            </Routes>
-          </ErrorBoundary>
-        </main>
-        <Footer />
-      </div>
-    </Router>
-  );
+                
+              </>
+            } />
+            <Route path="/session/:sessionId" element={<WorkoutSessionDetails />} />
+          </Routes>
+        </ErrorBoundary>
+      </main>
+      <Footer onLogout={logout} />
+    </div>
+  </Router>
+);
 }
 
 export default App;
