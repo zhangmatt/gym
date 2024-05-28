@@ -32,7 +32,6 @@ function WorkoutForm({ onAddSuccess }) {  // Added a prop to handle successful a
             setRest('');
 
             // Reload the page
-            
             window.location.reload();
         })
         

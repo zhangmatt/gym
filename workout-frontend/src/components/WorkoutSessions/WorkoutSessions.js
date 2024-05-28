@@ -6,16 +6,21 @@ function WorkoutSessions() {
     const [sessionGroups, setSessionGroups] = useState({});
     const navigate = useNavigate();
     
-    const fetchWorkouts = useCallback(() => { // Wrapped with useCallback
-        axios.get('/api/workouts')
-            .then(response => {
-                const grouped = groupWorkoutsBySession(response.data);
-                setSessionGroups(grouped);
-            })
-            .catch(error => {
-                console.error('Error fetching workouts:', error);
-            });
-    }, []); // No dependencies, this function doesn't depend on any external values
+    const fetchWorkouts = useCallback(() => {
+        const token = localStorage.getItem('token'); // Assuming you store the token in local storage
+        axios.get('/api/workouts', {
+          headers: {
+            'Authorization': `Bearer ${token}`
+          }
+        })
+        .then(response => {
+          const grouped = groupWorkoutsBySession(response.data);
+          setSessionGroups(grouped);
+        })
+        .catch(error => {
+          console.error('Error fetching workouts:', error);
+        });
+      }, []); // No dependencies, this function doesn't depend on any external values
 
     useEffect(() => {
         fetchWorkouts();

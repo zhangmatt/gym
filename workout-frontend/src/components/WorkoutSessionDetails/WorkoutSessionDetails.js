@@ -59,7 +59,7 @@ function WorkoutSessionDetails() {
         const restPeriod = document.getElementById(restId).value;
 
         if (restPeriod && weight) {
-            alert(`Completed set with ${weight}lbs`);
+            alert(`Completed set ${setNumber+1} with ${weight}lbs`);
             startTimer(parseInt(restPeriod), workoutId, setNumber);
             document.getElementById(`complete-btn${workoutId}-${setNumber}`).disabled = true;
         } else {
@@ -70,16 +70,15 @@ function WorkoutSessionDetails() {
     return (
         <div>
             <h1>
-                <h1>Workout Session: {sessionId}</h1>
+                Workout Session: {sessionId}
             </h1>
             <main>
                 <section className="workouts">
                     {Object.keys(workouts).map((sessionTitle, index) => (
                         <div className="workout" key={index}>
-                            <h2>{sessionTitle}</h2>
                             {workouts[sessionTitle].map((workout, idx) => (
                                 <div key={idx}>
-                                    <p>{workout.exercise}: Sets: {workout.sets} | Reps: {workout.reps} | Rest: {workout.rest}s</p>
+                                    <h3>{workout.exercise}: Sets: {workout.sets} | Reps: {workout.reps} | Rest: {workout.rest}s</h3>
                                     <div className="sets-container">
                                         {[...Array(workout.sets)].map((_, setIdx) => (
                                             <div className="set" key={setIdx}>

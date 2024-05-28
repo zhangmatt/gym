@@ -1,14 +1,23 @@
 # Import necessary modules from the Flask framework and its extensions
 import os
+
+from flask_cors import CORS
 from flask import Flask, request, render_template, jsonify, redirect, url_for, flash
+from flask_sqlalchemy import SQLAlchemy
 from werkzeug.utils import secure_filename
 from flask_wtf.csrf import CSRFProtect
+from werkzeug.security import generate_password_hash, check_password_hash
+from flask_wtf import FlaskForm
+from wtforms import StringField, PasswordField, BooleanField, SubmitField
+from wtforms.validators import ValidationError, DataRequired, Email, EqualTo
 
 # Create a Flask application instance
 # '__name__' is a special variable that gets as value the name of the Python script
 app = Flask(__name__, static_folder='static')
+#Configure the database
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///test.db'
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SECRET_KEY'] = 'poopy123megan'  # Make sure to set a secure secret key
-
 # Configure the maximum upload size (e.g., 16MB) and upload folder
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024
 app.config['UPLOAD_FOLDER'] = 'static/uploads/'
@@ -21,13 +30,83 @@ if not os.path.exists(app.config['UPLOAD_FOLDER']):
 # Allowed extensions
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif', 'mp4', 'avi'}
 
+#initialize the database
+db = SQLAlchemy(app)
+CORS(app)
 # Initialize an empty list to store workout data
 workout_sessions = {}
 
+# login page
+class User(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(64), index=True, unique=True)
+    email = db.Column(db.String(120), index=True, unique=True)
+    password_hash = db.Column(db.String(128))
+
+    def set_password(self, password):
+        self.password_hash = generate_password_hash(password)
+
+    def check_password(self, password):
+        return check_password_hash(self.password_hash, password)
+
+class RegistrationForm(FlaskForm):
+    username = StringField('Username', validators=[DataRequired()])
+    email = StringField('Email', validators=[DataRequired(), Email()])
+    password = PasswordField('Password', validators=[DataRequired()])
+    password2 = PasswordField(
+        'Repeat Password', validators=[DataRequired(), EqualTo('password')])
+    submit = SubmitField('Register')
+
+    def validate_username(self, username):
+        user = User.query.filter_by(username=username.data).first()
+        if user is not None:
+            raise ValidationError('Please use a different username.')
+
+    def validate_email(self, email):
+        user = User.query.filter_by(email=email.data).first()
+        if user is not None:
+            raise ValidationError('Please use a different email address.')
+
+@app.route('/register', methods=['GET', 'POST'])
+def register():
+    form = RegistrationForm()
+    if form.validate_on_submit():
+        user = User(username=form.username.data, email=form.email.data)
+        user.set_password(form.password.data)
+        db.session.add(user)
+        db.session.commit()
+        flash('Congratulations, you are now a registered user!')
+        return redirect(url_for('login'))
+    return render_template('register.html', title='Register', form=form)
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    # Assume a LoginForm similar to RegistrationForm
+    form = LoginForm()
+    if form.validate_on_submit():
+        user = User.query.filter_by(username=form.username.data).first()
+        if user is None or not user.check_password(form.password.data):
+            flash('Invalid username or password')
+            return redirect(url_for('login'))
+        # Logic to handle a successful login goes here
+        flash('Login requested for user {}'.format(form.username.data))
+        return redirect(url_for('index'))
+    return render_template('login.html', title='Sign In', form=form)
+
+#initialize the database
+def init_db():
+    with app.app_context():
+        with open("sql/schema/create_database.sql") as f:
+            sql = f.read()
+        db.session.execute(sql)
+        db.session.commit()
+
+# Check if the uploaded file has an allowed extension
 def allowed_file(filename):
     return '.' in filename and \
            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
+# Define a route for the upload page
 @app.route('/upload', methods=['GET', 'POST'])
 def upload_file():
     if request.method == 'POST':
@@ -118,6 +197,8 @@ def delete_exercise(session_title, exercise_index):
 # Check if the script is executed as the main program
 # and not being imported from another script
 if __name__ == '__main__':
+    with app.app_context():
+        init_db()
     # Run the application server
     # 'debug=True' enables auto-reloading on code changes and provides a debug interface
-    app.run(debug=True)
+    app.run(host='0.0.0.0', port=5001, debug=True)
