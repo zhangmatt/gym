@@ -18,23 +18,29 @@ function WorkoutForm({ onAddSuccess }) {  // Added a prop to handle successful a
             reps,
             rest
         };
-    
-        console.log('Submitting workout data:', workoutData); // Verify data before sending
-    
-        axios.post('/api/workouts', workoutData)
+
+        // Fetch token from local storage
+        const token = localStorage.getItem('token');
+
+        // Set headers for authorization if the token exists
+        const config = token ? {
+            headers: { Authorization: `Bearer ${token}` }
+        } : {};
+
+        console.log('Submitting workout data:', workoutData);
+
+        axios.post('/api/workouts', workoutData, config)
         .then(response => {
-            console.log('Received workout data from server:', response.data); // Log the server response
-            onAddSuccess(response.data); // Check the structure here
+            console.log('Received workout data from server:', response.data);
+            onAddSuccess(response.data);
             setSessionTitle('');
             setExercise('');
             setSets('');
             setReps('');
             setRest('');
-
-            // Reload the page
             window.location.reload();
+            // Optionally, use state update instead of reloading the page
         })
-        
         .catch(error => {
             console.error('Error adding workout:', error);
             alert('Failed to add workout');
@@ -45,7 +51,7 @@ function WorkoutForm({ onAddSuccess }) {  // Added a prop to handle successful a
 
     return (
         <div className="form-section">
-            <h3>Add a Workout</h3>
+            <h3>ADD WORKOUTS: </h3>
             <form onSubmit={handleSubmit} className="workout-form">
                 <div className="form-group">
                     <label>Session Title:</label>

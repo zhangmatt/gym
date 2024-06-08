@@ -43,6 +43,7 @@ CREATE TABLE WorkoutExercises (
     FOREIGN KEY (exercise_id) REFERENCES Exercises(exercise_id)
 );
 
+
 -- Recreate the 'workout' table with a 'user_id' column
 CREATE TABLE workouts (
     id INTEGER PRIMARY KEY AUTOINCREMENT,

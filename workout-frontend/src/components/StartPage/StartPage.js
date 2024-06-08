@@ -18,6 +18,7 @@ function StartPage({ onLogin, onGuest }) {
         axios.post('/api/login', { username: loginUsername, password: loginPassword })
             .then(response => {
                 console.log(response.data.message);
+                localStorage.setItem('token', response.data.token); // Store the token
                 onLogin(true);  // Update onLogin to set isAuthenticated to true
                 navigate('/home');  // Navigate to home page
             })
@@ -37,6 +38,7 @@ function StartPage({ onLogin, onGuest }) {
         axios.post('/api/register', { username: registerUsername, email: registerEmail, password: registerPassword })
             .then(response => {
                 console.log(response.data.message);
+                localStorage.setItem('token', response.data.token); // Store the token
                 onLogin(true);  // Automatically log in the user after registration
                 navigate('/home');  // Navigate to home page
             })
@@ -47,33 +49,32 @@ function StartPage({ onLogin, onGuest }) {
             });
     };
 
-    const handleGuestAccess = () => {
-        onGuest();
-        navigate('/home');
-    };
+    //const handleGuestAccess = () => {
+    //    onGuest();
+    //    navigate('/home');
+    //};
 
     return (
         <div className={styles.container}>
             {error && <div className={styles.error}>{error}</div>} {/* Display error message if present */}
             <form onSubmit={handleLogin} className={styles.form}>
-                <h2 className={styles.title}>Login</h2>
+                <h2 className={styles.title}>LOGIN</h2>
                 <input type="text" className={styles.input} value={loginUsername} onChange={e => setLoginUsername(e.target.value)} placeholder="Username" />
                 <input type="password" className={styles.input} value={loginPassword} onChange={e => setLoginPassword(e.target.value)} placeholder="Password" />
-                <button type="submit" className={styles.button}>Login</button>
+                <button type="submit" className={styles.button}>LOGIN</button>
             </form>
 
             <form onSubmit={handleRegister} className={styles.form}>
-                <h2 className={styles.title}>Register</h2>
+                <h2 className={styles.title}>REGISTER</h2>
                 <input type="text" className={styles.input} value={registerUsername} onChange={e => setRegisterUsername(e.target.value)} placeholder="Username" />
                 <input type="email" className={styles.input} value={registerEmail} onChange={e => setRegisterEmail(e.target.value)} placeholder="Email" />
                 <input type="password" className={styles.input} value={registerPassword} onChange={e => setRegisterPassword(e.target.value)} placeholder="Password" />
                 <input type="password" className={styles.input} value={confirmPassword} onChange={e => setConfirmPassword(e.target.value)} placeholder="Confirm Password" />
-                <button type="submit" className={styles.button}>Register</button>
+                <button type="submit" className={styles.button}>REGISTER</button>
             </form>
-
-            <button onClick={handleGuestAccess} className={`${styles.button} ${styles.guestButton}`}>Continue as Guest</button>
         </div>
     );
 }
+// <button onClick={handleGuestAccess} className={`${styles.button} ${styles.guestButton}`}>Continue as Guest</button>
 
 export default StartPage;

@@ -14,9 +14,6 @@ function Footer({ onLogout }) {
 
   return (
     <footer>
-      <button onClick={handleBackToLogin} style={{ margin: '10px' }}>
-        Back to Login
-      </button>
       <p>Created by <a href="https://github.com/zhangmatt" target="_blank" rel="noopener noreferrer">Matthew Zhang</a></p>
     </footer>
   );

@@ -50,27 +50,37 @@ function WorkoutSessions() {
         const encodedTitle = encodeURIComponent(sessionTitle);
         console.log('Deleting session:', encodedTitle);
         
-        axios.delete(`/api/workouts/session/${encodedTitle}`)
-            .then(() => {
-                alert('Session deleted successfully');
-                fetchWorkouts();  // Refetch to update the list after deletion
-            })
-            .catch(error => {
-                console.error('Error deleting session:', error);
-                alert(`Failed to delete session: ${error.response ? error.response.data.error : 'Server error'}`);
-            });
+        const token = localStorage.getItem('token'); // Assuming you store the token in local storage
+        axios.delete(`/api/workouts/session/${encodedTitle}`, {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        })
+        .then(() => {
+            alert('Session deleted successfully');
+            fetchWorkouts();  // Refetch to update the list after deletion
+        })
+        .catch(error => {
+            console.error('Error deleting session:', error);
+            alert(`Failed to delete session: ${error.response ? error.response.data.error : 'Server error'}`);
+        });
     };
     
     const handleDeleteWorkout = (workoutId) => {
-        axios.delete(`/api/workouts/${workoutId}`)
-            .then(() => {
-                alert('Workout deleted successfully');
-                fetchWorkouts();  // Refetch to update the list after deletion
-            })
-            .catch(error => {
-                console.error('Error deleting workout:', error);
-                alert('Failed to delete workout');
-            });
+        const token = localStorage.getItem('token'); // Assuming you store the token in local storage
+        axios.delete(`/api/workouts/${workoutId}`, {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        })
+        .then(() => {
+            alert('Workout deleted successfully');
+            fetchWorkouts();  // Refetch to update the list after deletion
+        })
+        .catch(error => {
+            console.error('Error deleting workout:', error);
+            alert('Failed to delete workout');
+        });
     };
 
     return (

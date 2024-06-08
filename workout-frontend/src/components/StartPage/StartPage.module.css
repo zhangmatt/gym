@@ -4,60 +4,70 @@
     align-items: center;
     justify-content: center;
     height: 100vh;
-    background-color: #f4f4f4;
+    background: linear-gradient(135deg, #8b3f05, #520303);
     padding: 20px;
 }
 
 .form {
-    background: white;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    background: #ffffff;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 8px 16px rgba(0,0,0,0.2);
     margin-bottom: 20px;
-    width: 300px;
+    width: 340px;
+    display: flex;
+    flex-direction: column;
 }
 
 .title {
     text-align: center;
     color: #333;
-    margin-bottom: 20px;
+    margin-bottom: 30px;
+    font-size: 24px;
+    font-weight: bold;
 }
 
 .input {
-    width: 100%;
-    padding: 10px;
-    margin-bottom: 10px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    box-sizing: border-box;
+    width: 80%;
+    padding: 12px 15px;
+    margin-bottom: 15px;
+    border: 2px solid #ccc;
+    border-radius: 5px;
+    transition: border-color 0.3s;
+}
+
+.input:focus {
+    border-color: #a777e3;
+    outline: none;
 }
 
 .button, .guestButton {
-    padding: 10px;
+    padding: 12px;
     border: none;
-    border-radius: 4px;
+    border-radius: 5px;
     cursor: pointer;
     font-size: 16px;
     text-transform: uppercase;
     letter-spacing: 1px;
-    margin-top: 10px; /* Give some space above the button */
+    transition: background-color 0.3s, color 0.3s;
+    margin-top: 10px;
 }
 
 .button {
     width: 100%;
-    background-color: #f58025;
+    background-color: #4CAF50;
     color: white;
+    background: linear-gradient(270deg, #a33e00, #ae0303);
+
 }
 
-.button:hover {
-    background-color: #f58025;
+.button:hover, .guestButton:hover {
+    background-color: #367c39;
+    color: #ffffff;
 }
 
 .guestButton {
-    width: auto; /* Allows the button to shrink around the text content */
-    background-color: #4CAF50; /* Green for the guest button */
-}
-
-.guestButton:hover {
-    background-color: #45a049;
+    background-color: #f58025; /* Orange for the guest button */
+    color: white;
+    margin-left: auto;
 }

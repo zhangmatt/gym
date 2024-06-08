@@ -1,11 +1,13 @@
 import React from 'react';
+import './Header.module.css'; // Assume your CSS is in this file
 
-function Header() {
+const Header = ({ isAuthenticated, onLogout }) => {
   return (
-    <header>
-      <h1>Workout Tracker</h1>
+    <header className="header">
+      <h1 className="header-title">🐯 TIGERTRAX WORKOUTS 🐯</h1>
+      {isAuthenticated && <button onClick={onLogout} className="logout-button">Logout</button>}
     </header>
   );
-}
+};
 
 export default Header;
