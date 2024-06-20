@@ -3,3 +3,4 @@ Flask-CORS
 Flask-SQLAlchemy
 Werkzeug
 flask-wtf
+gunicorn==20.1.0
