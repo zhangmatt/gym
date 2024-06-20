@@ -9,6 +9,18 @@ import WorkoutSessionDetails from './components/WorkoutSessionDetails/WorkoutSes
 import StartPage from './components/StartPage/StartPage.js';
 import axios from 'axios';
 import './App.css';
+const API_URL = 'https://workout-backend-tma6.onrender.com';
+
+fetch(`${API_URL}/api/some-endpoint`, {
+    method: 'GET',
+    headers: {
+        'Content-Type': 'application/json'
+    }
+})
+.then(response => response.json())
+.then(data => console.log(data))
+.catch(error => console.error('Error:', error));
+
 
 class ErrorBoundary extends React.Component {
   constructor(props) {
