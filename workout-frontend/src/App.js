@@ -70,7 +70,7 @@ function App() {
   
     setIsAuthenticated(false);
     localStorage.removeItem('token');
-    axios.post('/api/logout', {}, config)
+    axios.post('${API_URL}/api/logout', {}, config)
       .then(response => {
         console.log(response.data.message);
         navigate('/');
@@ -122,7 +122,7 @@ function App() {
     }
     const config = { headers: { Authorization: `Bearer ${token}` } };
 
-    axios.get('/api/workouts', config)
+    axios.get('${API_URL}/api/workouts', config)
       .then(response => {
         const grouped = groupWorkoutsBySession(response.data);
         setSessionGroups(grouped);
@@ -139,7 +139,7 @@ function App() {
   }, [isAuthenticated, fetchWorkouts]);
 
   useEffect(() => {
-    axios.get('/api/check-session')
+    axios.get('${API_URL}/api/check-session')
       .then(response => {
         setIsAuthenticated(response.data.isAuthenticated);
         if (response.data.isAuthenticated) {

@@ -24,6 +24,7 @@ ChartJS.register(
 );
 
 function WorkoutSessionDetails() {
+    const API_URL = 'https://workout-backend-tma6.onrender.com';
     const [workouts, setWorkouts] = useState({});
     const [chartData, setChartData] = useState({});
     const { sessionId } = useParams();
@@ -35,7 +36,7 @@ function WorkoutSessionDetails() {
             const token = localStorage.getItem('token');
             const config = token ? { headers: { Authorization: `Bearer ${token}` } } : {};
 
-            axios.get(`/api/workouts/${sessionId}`, config)
+            axios.get(`${API_URL}/api/workouts/${sessionId}`, config)
                 .then(response => {
                     const grouped = response.data.reduce((acc, workout) => {
                         acc[workout.session_title] = acc[workout.session_title] || [];

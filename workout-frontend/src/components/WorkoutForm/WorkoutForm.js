@@ -3,6 +3,7 @@ import axios from 'axios';
 
 
 function WorkoutForm({ onAddSuccess }) {  // Added a prop to handle successful addition
+    const API_URL = 'https://workout-backend-tma6.onrender.com';
     const [sessionTitle, setSessionTitle] = useState('');
     const [exercise, setExercise] = useState('');
     const [sets, setSets] = useState('');
@@ -29,7 +30,7 @@ function WorkoutForm({ onAddSuccess }) {  // Added a prop to handle successful a
 
         console.log('Submitting workout data:', workoutData);
 
-        axios.post('/api/workouts', workoutData, config)
+        axios.post(`${API_URL}//api/workouts`, workoutData, config)
         .then(response => {
             console.log('Received workout data from server:', response.data);
             onAddSuccess(response.data);

@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import styles from './StartPage.module.css'; // Import the CSS module
 
 function StartPage({ onLogin, onGuest }) {
+    const API_URL = 'https://workout-backend-tma6.onrender.com';
     const [loginUsername, setLoginUsername] = useState('');
     const [loginPassword, setLoginPassword] = useState('');
     const [registerUsername, setRegisterUsername] = useState('');
@@ -15,7 +16,7 @@ function StartPage({ onLogin, onGuest }) {
 
     const handleLogin = (e) => {
         e.preventDefault();
-        axios.post('/api/login', { username: loginUsername, password: loginPassword })
+        axios.post(`${API_URL}/api/login`, { username: loginUsername, password: loginPassword })
             .then(response => {
                 console.log(response.data.message);
                 localStorage.setItem('token', response.data.token); // Store the token
@@ -35,7 +36,7 @@ function StartPage({ onLogin, onGuest }) {
             setError('Passwords do not match!');
             return; // Prevent the form from submitting
         }
-        axios.post('/api/register', { username: registerUsername, email: registerEmail, password: registerPassword })
+        axios.post(`${API_URL}/api/register`, { username: registerUsername, email: registerEmail, password: registerPassword })
             .then(response => {
                 console.log(response.data.message);
                 localStorage.setItem('token', response.data.token); // Store the token
