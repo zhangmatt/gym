@@ -30,7 +30,7 @@ function WorkoutForm({ onAddSuccess }) {  // Added a prop to handle successful a
 
         console.log('Submitting workout data:', workoutData);
 
-        axios.post(`${API_URL}//api/workouts`, workoutData, config)
+        axios.post(`${API_URL}/api/workouts`, workoutData, config)
         .then(response => {
             console.log('Received workout data from server:', response.data);
             onAddSuccess(response.data);
