@@ -1,2 +1,1 @@
-# gym
-gymmaxxing
+# Workout Session Tracker for the Princeton Gym
